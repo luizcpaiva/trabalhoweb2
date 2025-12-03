@@ -12,13 +12,24 @@ function MyOrders() {
             headers: { 'Authorization': `Bearer ${token}` }
         })
         .then(res => res.json())
-        .then(data => setOrders(data))
-        .catch(err => console.error(err));
+        .then(data => {
+            if (Array.isArray(data)) {
+                setOrders(data);
+            } else {
+                console.error("Erro ao buscar pedidos (Backend retornou algo estranho):", data);
+            }
+        })
+        .catch(err => console.error("Erro de conexão:", err));
     }
   }, [user]);
 
-  if (!orders.length) {
-    return <div className="pt-24 text-center text-gray-600">Você ainda não fez nenhuma compra.</div>;
+  if (!orders || orders.length === 0) {
+    return (
+        <div className="min-h-screen pt-32 text-center text-gray-600">
+            <h2 className="text-xl font-bold">Nenhum pedido encontrado.</h2>
+            <p className="mt-2 text-sm text-gray-400">Ou houve um erro ao carregar seus dados.</p>
+        </div>
+    );
   }
 
   return (
@@ -42,15 +53,17 @@ function MyOrders() {
                     </div>
                     
                     <div className="p-6">
-                        {order.OrderItems.map(item => (
+                        {order.OrderItems && order.OrderItems.map(item => (
                             <div key={item.id} className="flex justify-between py-2 border-b border-gray-50 last:border-0">
-                                <span className="text-gray-600">{item.Product.name} (x{item.quantity})</span>
+                                <span className="text-gray-600">
+                                    {item.Product ? item.Product.name : 'Produto Indisponível'} (x{item.quantity})
+                                </span>
                                 <span className="font-medium text-gray-900">R$ {item.price}</span>
                             </div>
                         ))}
                         <div className="mt-4 text-right">
                             <span className="text-lg font-bold text-purple-600">
-                                Total: R$ {order.OrderItems.reduce((acc, i) => acc + (i.price * i.quantity), 0).toFixed(2)}
+                                Total: R$ {order.OrderItems ? order.OrderItems.reduce((acc, i) => acc + (i.price * i.quantity), 0).toFixed(2) : '0.00'}
                             </span>
                         </div>
                     </div>

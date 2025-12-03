@@ -5,21 +5,47 @@ function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); 
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("Registro:", username, email, password);
-    navigate('/login'); 
+    setError('');
+
+    try {
+        const response = await fetch('http://localhost:5000/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Cadastro realizado com sucesso! Faça login.");
+            navigate('/login'); 
+        } else {
+            setError(data.message || 'Erro ao criar conta.');
+        }
+    } catch (err) {
+        console.error(err);
+        setError('Erro de conexão com o servidor.');
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-indigo-500 to-teal-400">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-indigo-500 to-teal-400 p-4">
       <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all hover:scale-[1.01]">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold text-gray-800">Crie sua conta</h2>
           <p className="text-gray-500 mt-2">Junte-se à Bosque Mágico grátis</p>
         </div>
+
+        {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center text-sm font-bold">
+                {error}
+            </div>
+        )}
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
