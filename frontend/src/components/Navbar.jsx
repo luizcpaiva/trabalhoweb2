@@ -1,8 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const { cartCount } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -21,46 +23,51 @@ function Navbar() {
             </span>
           </Link>
 
-          <div className="flex items-center space-x-4 sm:space-x-8">
+          <div className="flex items-center space-x-6"> 
+            
             <Link to="/" className="text-gray-600 hover:text-purple-600 font-medium transition duration-200">
               Loja
             </Link>
             
             <Link to="/cart" className="relative text-gray-600 hover:text-purple-600 transition duration-200 flex items-center gap-1">
               <span>Carrinho</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                    {cartCount}
+                </span>
+              )}
             </Link>
 
-            <div className="flex items-center space-x-3 sm:space-x-4 pl-4 border-l border-gray-200">
+            <div className="flex items-center pl-6 border-l border-gray-200 gap-4">
               {user ? (
                 <>
-                  <div className="hidden md:flex flex-col items-end mr-2">
-                    <span className="text-xs text-gray-400">Bem-vindo,</span>
-                    <span className="text-sm font-bold text-gray-800 leading-none">{user.username}</span>
-                  </div>
+                  <span className="text-gray-600">
+                    Olá, <strong className="text-purple-600">{user.username}</strong>
+                  </span>
                   
                   <Link 
                     to="/my-orders" 
-                    className="text-gray-600 hover:text-purple-600 font-medium text-sm transition"
+                    className="text-gray-600 hover:text-purple-600 font-medium text-sm transition border border-gray-200 px-3 py-1 rounded-full hover:border-purple-300"
                   >
                     Meus Pedidos
                   </Link>
 
                   <button 
                     onClick={handleLogout} 
-                    className="text-red-500 hover:text-white border border-red-200 hover:bg-red-500 hover:border-red-500 px-3 py-1.5 rounded-md text-sm font-medium transition duration-200"
+                    className="text-red-500 hover:text-white border border-red-200 hover:bg-red-500 hover:border-red-500 px-3 py-1 rounded-full text-sm font-medium transition duration-200"
                   >
                     Sair
                   </button>
                 </>
               ) : (
-                <>
+                <div className="flex items-center gap-3">
                   <Link to="/login" className="text-gray-600 hover:text-purple-600 font-medium">
                     Entrar
                   </Link>
                   <Link to="/register" className="bg-purple-600 text-white px-5 py-2 rounded-full font-medium hover:bg-purple-700 hover:shadow-md transform hover:-translate-y-0.5 transition duration-200">
                     Cadastrar
                   </Link>
-                </>
+                </div>
               )}
             </div>
           </div>

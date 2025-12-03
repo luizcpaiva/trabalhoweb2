@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Cart() {
   const [items, setItems] = useState([]);
   const { user } = useAuth();
+  const { refreshCart } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +40,8 @@ function Cart() {
         if (res.ok) {
             alert("Compra realizada com sucesso! 🎉");
             setItems([]);
-            navigate('/my-orders'); 
+            refreshCart(); 
+            navigate('/my-orders');
         } else {
             alert("Erro ao finalizar compra. Tente novamente.");
         }

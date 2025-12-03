@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); 
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const { user } = useAuth();
+  const { refreshCart } = useCart(); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,16 +51,18 @@ function Home() {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ productId, quantity: 1 })
     });
-    if (response.ok) alert("Produto adicionado!");
+    
+    if (response.ok) {
+        alert("Produto adicionado!");
+        refreshCart();
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
         
-        {/* === COLUNA DA ESQUERDA: FILTROS === */}
         <aside className="w-full md:w-1/4">
-            {/* Barra de Busca */}
             <div className="bg-white p-6 rounded-2xl shadow-lg mb-6">
                 <h3 className="font-bold text-gray-700 mb-4">Buscar</h3>
                 <input 
@@ -70,7 +74,6 @@ function Home() {
                 />
             </div>
 
-            {/* Lista de Categorias */}
             <div className="bg-white p-6 rounded-2xl shadow-lg">
                 <h3 className="font-bold text-gray-700 mb-4">Categorias</h3>
                 <ul className="space-y-2">
@@ -96,7 +99,6 @@ function Home() {
             </div>
         </aside>
 
-        {/* === COLUNA DA DIREITA: PRODUTOS === */}
         <main className="w-full md:w-3/4">
             <h1 className="text-3xl font-bold text-gray-900 mb-8">
                 {selectedCategory ? `Categoria: ${selectedCategory}` : 'Destaques da Semana ✨'}

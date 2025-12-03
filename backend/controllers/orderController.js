@@ -1,5 +1,5 @@
 const { Order, OrderItem, Product } = require('../models');
-const { Op } = require('sequelize');
+const { Op } = require('sequelize'); 
 
 exports.getCart = async (req, res) => {
     try {
@@ -8,12 +8,12 @@ exports.getCart = async (req, res) => {
             include: [
                 {
                     model: OrderItem,
-                    include: [Product] 
+                    include: [Product]
                 }
             ]
         });
 
-        if (!cart) return res.json({ items: [] }); 
+        if (!cart) return res.json({ items: [] });
 
         const items = cart.OrderItems.map(item => ({
             id: item.id,
