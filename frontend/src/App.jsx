@@ -1,19 +1,24 @@
-function App() {
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-        <h1 className="text-4xl font-bold text-primary mb-4">
-          Loja Bosque Mágico
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Frontend React + Tailwind configurado com sucesso! 🚀
-        </p>
-        <button className="mt-6 px-6 py-2 bg-secondary text-white rounded hover:bg-green-600 transition duration-300">
-          Botão Bonito
-        </button>
-      </div>
-    </div>
-  )
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+
+function Home() {
+  return <h1 className="text-center mt-10 text-2xl">Página da Loja (Em construção...)</h1>;
 }
 
-export default App
+function Register() {
+  return <h1 className="text-center mt-10 text-2xl">Página de Cadastro (Em construção...)</h1>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
