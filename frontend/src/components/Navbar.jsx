@@ -23,7 +23,7 @@ function Navbar() {
             </span>
           </Link>
 
-          <div className="flex items-center space-x-6"> 
+          <div className="flex items-center space-x-6">
             
             <Link to="/" className="text-gray-600 hover:text-purple-600 font-medium transition duration-200">
               Loja
@@ -41,10 +41,19 @@ function Navbar() {
             <div className="flex items-center pl-6 border-l border-gray-200 gap-4">
               {user ? (
                 <>
-                  <span className="text-gray-600">
+                  <span className="text-gray-600 hidden sm:inline">
                     Olá, <strong className="text-purple-600">{user.username}</strong>
                   </span>
                   
+                  {user.isAdmin && (
+                    <Link 
+                        to="/admin" 
+                        className="text-purple-700 font-bold border border-purple-200 bg-purple-50 hover:bg-purple-100 px-3 py-1 rounded-full text-sm transition"
+                    >
+                        Painel Admin
+                    </Link>
+                  )}
+
                   <Link 
                     to="/my-orders" 
                     className="text-gray-600 hover:text-purple-600 font-medium text-sm transition border border-gray-200 px-3 py-1 rounded-full hover:border-purple-300"
