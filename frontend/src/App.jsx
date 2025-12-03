@@ -1,18 +1,20 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-
-function Home() {
-  return <h1 className="text-center mt-10 text-2xl">Página da Loja (Em construção...)</h1>;
-}
+import Home from './pages/Home';
 
 function App() {
   return (
     <BrowserRouter>
+
+      <Navbar />
+      
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/cart" element={<h1 className="pt-24 text-center">Carrinho (Em breve)</h1>} />
       </Routes>
     </BrowserRouter>
   );
