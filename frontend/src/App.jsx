@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/cart" element={<h1 className="pt-24 text-center">Carrinho (Em breve)</h1>} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
