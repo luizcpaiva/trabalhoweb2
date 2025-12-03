@@ -1,4 +1,5 @@
 const { Order, OrderItem, Product } = require('../models');
+const { Op } = require('sequelize');
 
 exports.getCart = async (req, res) => {
     try {
@@ -64,5 +65,45 @@ exports.addToCart = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erro ao adicionar ao carrinho' });
+    }
+};
+
+exports.checkout = async (req, res) => {
+    try {
+        const cart = await Order.findOne({
+            where: { UserId: req.user.id, status: 'pendente' }
+        });
+
+        if (!cart) return res.status(404).json({ message: 'Carrinho vazio' });
+
+        cart.status = 'pago';
+        await cart.save();
+
+        res.json({ message: 'Compra realizada com sucesso!' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao finalizar compra' });
+    }
+};
+
+exports.getMyOrders = async (req, res) => {
+    try {
+        const orders = await Order.findAll({
+            where: {
+                UserId: req.user.id,
+                status: { [Op.ne]: 'pendente' }
+            },
+            include: [
+                {
+                    model: OrderItem,
+                    include: [Product]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+
+        res.json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao buscar histórico' });
     }
 };
