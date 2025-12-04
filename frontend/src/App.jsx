@@ -9,6 +9,7 @@ import Cart from './pages/Cart';
 import MyOrders from './pages/MyOrders'; 
 import AdminDashboard from './pages/AdminDashboard'; 
 import Footer from './components/Footer'; 
+import NotFound from './pages/NotFound'; 
  
 function App() { 
   return ( 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/cart" element={<Cart />} /> 
             <Route path="/my-orders" element={<MyOrders />} /> 
             <Route path="/admin" element={<AdminDashboard />} /> 
+            <Route path="*" element={<NotFound />} />
           </Routes> 
           </div> 
           <Footer /> 
